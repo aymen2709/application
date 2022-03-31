@@ -1,6 +1,7 @@
-import {  View, StyleSheet  } from 'react-native';
+import {  View,Text, StyleSheet  } from 'react-native';
 
 import MapView, { PROVIDER_DEFAULT } from 'react-native-maps';
+
 
 const MapPage = () => {
     
@@ -9,17 +10,20 @@ const MapPage = () => {
             <MapView 
             style={styles.map}
             
-                Region={{
+                initialRegion={{
                     latitude: 35.820918,
                     longitude:  10.592252,
                     latitudeDelta: 0.015,
                     longitudeDelta: 0.0121,
                 }}
-                     provider={PROVIDER_DEFAULT}>
-        <MapView.UrlTile
-          urlTemplate={"http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"}
-          shouldReplaceMapContent={true}
-        />
+                provider={PROVIDER_DEFAULT}>
+                <MapView.UrlTile
+                  urlTemplate={"http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+                  shouldReplaceMapContent={true}>
+                      </MapView.UrlTile>
+                     
+        
+        
     
                 </MapView>
         </View>
