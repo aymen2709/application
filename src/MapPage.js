@@ -1,6 +1,7 @@
 import {  View,Text, StyleSheet  } from 'react-native';
 
-import MapView, { PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
+
 
 
 const MapPage = () => {
@@ -21,11 +22,23 @@ const MapPage = () => {
                   urlTemplate={"http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"}
                   shouldReplaceMapContent={true}>
                       </MapView.UrlTile>
-                     
-        
-        
-    
-                </MapView>
+                
+               <Marker
+                coordinate={{
+                    latitude: 35.820918,
+                    longitude: 10.592252,
+                    
+                    
+                    
+                }}
+
+                
+                  
+              ></Marker>
+             </MapView>
+            
+
+                
         </View>
           
     )
