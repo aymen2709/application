@@ -66,6 +66,8 @@ const MapPage = () => {
                     coordinate={{
                         latitude: 35.820918,
                         longitude: 10.592252,
+
+                        
                     }}
                 ></Marker>
 
