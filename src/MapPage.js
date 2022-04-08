@@ -1,9 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
-
+import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import React, { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
-
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import * as TaskManager from 'expo-task-manager';
 
 
@@ -23,7 +21,7 @@ const MapPage = () => {
             }
 
             let location = await Location.getCurrentPositionAsync({});
-            console.log(location);
+            
             setLocation(location);
         })();
     }, []);
@@ -34,13 +32,16 @@ const MapPage = () => {
     } else if (location) {
         text = JSON.stringify(location);
     }
-    TaskManager.defineTask(YOUR_TASK_NAME, ({ data: { locations }, error }) => {
-        if (error) {
+    TaskManager.defineTask('YOUR_TASK_NAME', ({ data: { locations }, error }) => {
+        if (error)
+         { console.log(error)
           // check `error.message` for more details.
           return;
         }
         console.log('Received new locations', locations);
        });
+
+       Location.startLocationUpdatesAsync('YOUR_TASK_NAME',{})
 
     return (
         <View style={styles.container}>
