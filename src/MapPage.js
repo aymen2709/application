@@ -1,9 +1,7 @@
 import {  View,Text,  StyleSheet  } from 'react-native';
-
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import { Constants, Location, Permissions } from 'expo';
 
- 
+import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 
 
 
