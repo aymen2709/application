@@ -1,74 +1,89 @@
-import {  View,Text,  StyleSheet  } from 'react-native';
-import { Constants, Location, Permissions } from 'expo';
+import { View, Text, StyleSheet } from 'react-native';
+
+import React, { useState, useEffect } from 'react';
+import * as Location from 'expo-location';
 
 import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
+import * as TaskManager from 'expo-task-manager';
 
 
 
 
 
 const MapPage = () => {
-    ComponentDidMount=()=> {
-        this._getLocationAsync();
+    const [location, setLocation] = useState(null);
+    const [errorMsg, setErrorMsg] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            console.log(location);
+            setLocation(location);
+        })();
+    }, []);
+
+    let text = 'Waiting..';
+    if (errorMsg) {
+        text = errorMsg;
+    } else if (location) {
+        text = JSON.stringify(location);
+    }
+    TaskManager.defineTask(YOUR_TASK_NAME, ({ data: { locations }, error }) => {
+        if (error) {
+          // check `error.message` for more details.
+          return;
         }
-      
-       
-      
-       _getLocationAsync = async () => {
-         let { status } = await Permissions.askAsync(Permissions.LOCATION);
-         if (status !== 'granted') {
-           this.setState({
-             locationResult: 'Permission to access location was denied',
-             location,
-           });
-         }
-      
-         let location = await Location.getCurrentPositionAsync({});
-      console.Log("MYLIVELOCATION",""+JSON.stringify(location));
-       };
-    
+        console.log('Received new locations', locations);
+       });
+
     return (
         <View style={styles.container}>
-            <MapView 
-            style={styles.map}
-            
+            <MapView
+                style={styles.map}
+
                 initialRegion={{
                     latitude: 35.820918,
-                    longitude:  10.592252,
+                    longitude: 10.592252,
                     latitudeDelta: 0.015,
                     longitudeDelta: 0.0121,
                 }}
-                
-                
+
+
                 provider={PROVIDER_DEFAULT}>
                 <MapView.UrlTile
-                  urlTemplate={"http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"}
-                  shouldReplaceMapContent={true}>
-            </MapView.UrlTile>
-                
-               <Marker
-                coordinate={{
-                    latitude: 35.820918,
-                longitude: 10.592252,     
-                }}    
-            ></Marker>
-            
+                    urlTemplate={"http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+                    shouldReplaceMapContent={true}>
+                </MapView.UrlTile>
 
-              
-             
+                <Marker
+                    coordinate={{
+                        latitude: 35.820918,
+                        longitude: 10.592252,
+                    }}
+                ></Marker>
 
-             </MapView>
-            
-             
-            
 
-                
+
+
+
+            </MapView>
+
+
+
+
+
         </View>
-          
+
     )
 }
 
-    
+
 
 
 
@@ -79,17 +94,17 @@ MapPage.navigationOptions = {
 
 const styles = StyleSheet.create({
     container: {
-        
+
         flex: 1,
         backgroundColor: '#ffffff00',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    map:{
-        
+    map: {
+
         flex: 1,
-        width:"100%",
-        
+        width: "100%",
+
         alignItems: 'center',
         justifyContent: 'center',
 
