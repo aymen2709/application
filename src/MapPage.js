@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import MapView, { Callout, Marker, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, {  PROVIDER_DEFAULT } from 'react-native-maps';
 import React, { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
