@@ -1,32 +1,47 @@
 import { View, Text, StyleSheet } from 'react-native';
-
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
-import { Constants, Location, Permissions } from 'expo';
-
-
+import MapView, {  PROVIDER_DEFAULT } from 'react-native-maps';
+import React, { useState, useEffect } from 'react';
+import * as Location from 'expo-location';
+import * as TaskManager from 'expo-task-manager';
 
 
 
 
 
 const MapPage = () => {
-    ComponentDidMount = () => {
-        this._getLocationAsync();
+    const [location, setLocation] = useState(null);
+    const [errorMsg, setErrorMsg] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+
+            let location = await Location.getCurrentPositionAsync({});
+            
+            setLocation(location);
+        })();
+    }, []);
+
+    let text = 'Waiting..';
+    if (errorMsg) {
+        text = errorMsg;
+    } else if (location) {
+        text = JSON.stringify(location);
     }
-
-    _getLocationAsync = async () => {
-        let { status } = await Permissions.askAsync(Permissions.LOCATION);
-        if (status !== 'granted') {
-            this.setState({
-                locationResult: 'Permission to access location was denied',
-                location,
-            });
+    TaskManager.defineTask('YOUR_TASK_NAME', ({ data: { locations }, error }) => {
+        if (error)
+         { console.log(error)
+          // check `error.message` for more details.
+          return;
         }
+        console.log('Received new locations', locations);
+       });
 
-        let location = await Location.getCurrentPositionAsync({});
-        console.Log("MYLIVELOCATION", "" + JSON.stringify(location));
-        
-    };
+       Location.startLocationUpdatesAsync('YOUR_TASK_NAME',{})
 
     return (
         <View style={styles.container}>
@@ -39,6 +54,8 @@ const MapPage = () => {
                     latitudeDelta: 0.015,
                     longitudeDelta: 0.0121,
                 }}
+                showsUserLocation={true}
+               
 
 
                 provider={PROVIDER_DEFAULT}>
@@ -47,12 +64,7 @@ const MapPage = () => {
                     shouldReplaceMapContent={true}>
                 </MapView.UrlTile>
 
-                <Marker
-                    coordinate={{
-                        latitude: 35.820918,
-                        longitude: 10.592252,
-                    }}
-                ></Marker>
+            
 
 
 

@@ -4,11 +4,9 @@ import {StatusBar} from 'expo-status-bar';
 import {Text,View,StyleSheet,TextInput,TouchableOpacity} from'react-native';
 
 
-
 const SignUpPage=  props => {
-
+  
     
-
     return(
     <View style={ styles.container}>
 
@@ -34,7 +32,7 @@ const SignUpPage=  props => {
     <View style={styles.btnContainer}>
       <TouchableOpacity style={styles.UserBtn}>
       <Text style={styles.btnTxt} 
-      onPress={() => {props.navigation.navigate('LoginPage')}}>CREATE </Text>
+      onPress={() => {props.navigation.navigate('LoginPage')} }>CREATE </Text>
       </TouchableOpacity>
 
 
