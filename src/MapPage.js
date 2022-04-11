@@ -55,11 +55,7 @@ const MapPage = () => {
                     longitudeDelta: 0.0121,
                 }}
                 showsUserLocation={true}
-                onUserLocationChange={(e) =>{
-                    console.log("onUserLocationChange",e.nativeEvent.coordinate);
-                }
-
-                }
+               
 
 
                 provider={PROVIDER_DEFAULT}>
@@ -68,27 +64,7 @@ const MapPage = () => {
                     shouldReplaceMapContent={true}>
                 </MapView.UrlTile>
 
-                <Marker
-                    coordinate={{
-                        latitude: 35.820918,
-                        longitude: 10.592252,}}
-
-                    title="test title "
-                    draggable={true}
-                    onDragStart={(e) => {
-                        console.log("Drag start", e.nativeEvent.coordinate);
-
-                    }
-                    }
-                    
-                        
-                
-                >
-                    <Callout>
-                        <Text>I'm here</Text>
-                    </Callout>
-                    
-                </Marker>
+            
 
 
 
