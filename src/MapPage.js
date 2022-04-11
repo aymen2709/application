@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { Callout, Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import React, { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
@@ -54,6 +54,12 @@ const MapPage = () => {
                     latitudeDelta: 0.015,
                     longitudeDelta: 0.0121,
                 }}
+                showsUserLocation={true}
+                onUserLocationChange={(e) =>{
+                    console.log("onUserLocationChange",e.nativeEvent.coordinate);
+                }
+
+                }
 
 
                 provider={PROVIDER_DEFAULT}>
@@ -65,11 +71,24 @@ const MapPage = () => {
                 <Marker
                     coordinate={{
                         latitude: 35.820918,
-                        longitude: 10.592252,
+                        longitude: 10.592252,}}
 
+                    title="test title "
+                    draggable={true}
+                    onDragStart={(e) => {
+                        console.log("Drag start", e.nativeEvent.coordinate);
+
+                    }
+                    }
+                    
                         
-                    }}
-                ></Marker>
+                
+                >
+                    <Callout>
+                        <Text>I'm here</Text>
+                    </Callout>
+                    
+                </Marker>
 
 
 
