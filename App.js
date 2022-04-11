@@ -7,8 +7,6 @@ import StackNavigation from "./src/StackNavigation";
 
 
 
-
-
 export default function App (){
 
     return( 
