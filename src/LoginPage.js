@@ -1,6 +1,29 @@
 
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet,Text,View,TextInput,TouchableOpacity,Image} from'react-native';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from 'react';
+
+
+
+
+function signIn(email, password) {
+  console.log('Sign in called with email=',email,'password=',password);
+  const auth = getAuth();
+  signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+    // Success
+    const user = userCredential.user;
+    console.log(user);
+    props.navigation.navigate('MapPage')
+  }).catch(err => {
+
+    //error
+    const errorMsg = err.message;
+    console.log(errorMsg);
+  });
+}
+
+
 
 
 
@@ -8,8 +31,11 @@ import {StyleSheet,Text,View,TextInput,TouchableOpacity,Image} from'react-native
 
 const   LoginPage = props => {
 
+  const [userEmail, setUserEmail] = useState('');
+  const [password, setPassword] = useState('');    
 
-    
+ 
+ 
 
     return(
 
@@ -19,18 +45,22 @@ const   LoginPage = props => {
 
    <TextInput style={styles.inputEmail}
        placeholder="Email" 
- 
- 
-    />
+       keyboardType='email-address'
+       onChangeText={userEmail => setUserEmail(userEmail)}
+ />
+
    <TextInput style={styles.inputPassword}
     placeholder="password"
-    secureTextEntry={true}/>
+    
+    secureTextEntry={true}
+    onChangeText={password => setPassword(password)}/>
    <View style={styles.btnContainer}>
 
     <TouchableOpacity style={styles.UserBtn}>
       <Text style={styles.btnTxt}  
-      onPress={() => {props.navigation.navigate('MapPage')}} >Login</Text>
+      onPress={() => {signIn(userEmail, password)}} >Login</Text>
     </TouchableOpacity>
+
     <TouchableOpacity style={styles.UserBtn}>
       <Text style={styles.btnTxt } 
       onPress={() => {props.navigation.navigate('SignUpPage')}}>Signup</Text>
