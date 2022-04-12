@@ -1,179 +1,192 @@
 
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet,Text,View,TextInput,TouchableOpacity,Image} from'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from 'react';
 
 
 
 
-function signIn(email, password) {
-  console.log('Sign in called with email=',email,'password=',password);
-  const auth = getAuth();
-  signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
-    // Success
-    const user = userCredential.user;
-    console.log(user);
-    props.navigation.navigate('MapPage')
-  }).catch(err => {
-
-    //error
-    const errorMsg = err.message;
-    console.log(errorMsg);
-  });
-}
 
 
-
-
-
-
-
-const   LoginPage = props => {
+const LoginPage = props => {
 
   const [userEmail, setUserEmail] = useState('');
-  const [password, setPassword] = useState('');    
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
- 
- 
 
-    return(
+  function signIn(email, password) {
+    setErrorMsg('');
+    setLoading(true);
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+      // Success
+      const userId = userCredential.user.uid;
+      props.navigation.navigate('MapPage');
+      setLoading(false);
+    }).catch(err => {
+      //error
+      setErrorMsg(err.message);
+      setLoading(false);
+    });
+  }
 
- <View style={ styles.container}>
-   <Text style={styles.welcome}>Houmti Ndhifa</Text>
-   <StatusBar style ="auto"/>  
 
-   <TextInput style={styles.inputEmail}
-       placeholder="Email" 
-       keyboardType='email-address'
-       onChangeText={userEmail => setUserEmail(userEmail)}
- />
 
-   <TextInput style={styles.inputPassword}
-    placeholder="password"
-    
-    secureTextEntry={true}
-    onChangeText={password => setPassword(password)}/>
-   <View style={styles.btnContainer}>
+  return (
 
-    <TouchableOpacity style={styles.UserBtn}>
-      <Text style={styles.btnTxt}  
-      onPress={() => {signIn(userEmail, password)}} >Login</Text>
-    </TouchableOpacity>
+    <KeyboardAwareScrollView contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps='handled'>
 
-    <TouchableOpacity style={styles.UserBtn}>
-      <Text style={styles.btnTxt } 
-      onPress={() => {props.navigation.navigate('SignUpPage')}}>Signup</Text>
-    </TouchableOpacity>
+      <Text style={styles.welcome}>Houmti Ndhifa</Text>
+      <StatusBar style="auto" />
 
-     </View>
-     <Image source={require('../assets/img2.png')}></Image>
+      <TextInput style={styles.inputEmail}
+        placeholder="Email"
+        keyboardType='email-address'
+        onChangeText={userEmail => setUserEmail(userEmail)}
+      />
 
- </View>
-); 
+      <TextInput style={styles.inputPassword}
+        placeholder="password"
+        keyboardType='visible-password'
+        secureTextEntry={true}
+        onChangeText={password => setPassword(password)} />
+
+      {errorMsg != '' &&
+        <Text style={styles.error}>{errorMsg}</Text>}
+
+      <View style={styles.btnContainer}>
+
+        <TouchableOpacity style={styles.UserBtn}>
+          <Text style={styles.btnTxt}
+            onPress={() => { signIn(userEmail, password) }} >Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.UserBtn}>
+          <Text style={styles.btnTxt}
+            onPress={() => { props.navigation.navigate('SignUpPage') }}>Signup</Text>
+        </TouchableOpacity>
+      </View>
+
+      {loading &&
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#008000" />
+        </View>}
+
+
+      <Image source={require('../assets/img2.png')}></Image>
+    </KeyboardAwareScrollView>
+  );
 }
 
-LoginPage.navigationOptions= {
-
-    headerShown : false ,
-} ; 
+LoginPage.navigationOptions = {
+  headerShown: false,
+};
 
 
 
 
 
 const styles = StyleSheet.create({
-container: {
-flex: 1,
-backgroundColor: '#fff',
-alignItems: 'center',
-justifyContent:'center',
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
+  welcome: {
+    fontSize: 45,
+    textAlign: 'center',
+    margin: 10,
+    color: "#008000",
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    marginVertical: 10,
+  },
 
+  inputEmail: {
+    backgroundColor: "#fff",
+    padding: 15,
+    marginBottom: 10,
+    alignItems: 'center',
+    height: 50,
+    width: 300,
+    borderWidth: 1,
+    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    marginTop: 50,
 
-},
-welcome:{ 
+  },
 
-fontSize:45,
-textAlign:'center',
-margin:10,
-color:"#008000",
-fontWeight: 'bold',
-fontStyle: 'italic',
-marginVertical:10,
+  inputPassword: {
+    backgroundColor: "#fff",
+    padding: 15,
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 50,
+    width: 300,
+    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    borderWidth: 1,
+    marginTop: 40,
+  },
 
+  error: {
+    color: '#d8392b',
+    textAlign: 'center',
+    marginBottom: 10,
+    fontWeight: '600'
+  },
 
+  btnContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "90%",
+  },
 
+  UserBtn: {
+    backgroundColor: "#008000",
+    padding: 15,
+    width: "45%",
+    borderRadius: 26,
+    justifyContent: 'center',
+  },
 
+  btnTxt: {
+    fontSize: 18,
+    textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
 
-},
-inputEmail:{
+  Image: {
+    width: 400,
+    height: 200,
+    marginVertical: 10,
+  },
 
-backgroundColor:"#fff",
-padding:15,
-marginBottom:10,
-alignItems:'center',
-
-
-height: 50,
-width: 300,
-borderWidth: 1,
-borderRadius: 20,
-borderTopRightRadius: 20,
-borderTopLeftRadius: 20,
-marginTop: 50,
-
-},
-inputPassword:{
-
-backgroundColor:"#fff",
-padding:15,
-marginBottom:10,
-alignItems:'center',
-
-justifyContent: 'center',
-height: 50,
-width: 300,
-borderRadius: 20,
-borderTopRightRadius: 20,
-borderTopLeftRadius: 20,
-borderWidth: 1,
-marginTop: 40,
-},
-
-btnContainer:{
-
-flexDirection:"row",
-justifyContent:"space-between",
-width:"90%",
-
-},
-UserBtn:{
-backgroundColor:"#008000",
-padding:15,
-width:"45%",
-borderRadius: 26,
-justifyContent: 'center',
-
-
-
-},
-btnTxt:{
-fontSize:18,
-textAlign:"center",
-color:"white",
-fontWeight:"bold",
-textTransform:"uppercase",
-},
-Image:{
-width:400,
-height:200,
-marginVertical:10,
-
-}
+  loadingContainer: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    zIndex: 3,
+    elevation: 3,
+    backgroundColor: '#ffffffc0'
+  }
 
 
 
 });
 
-export default LoginPage ; 
+export default LoginPage; 

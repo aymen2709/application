@@ -9,12 +9,12 @@ import { initializeApp } from 'firebase/app';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCZmc_bWSzHPClO0FTIbGeALasuGJdP7Uk",
-  authDomain: "houmti-ndhifa.firebaseapp.com",
-  projectId: "houmti-ndhifa",
-  storageBucket: "houmti-ndhifa.appspot.com",
-  messagingSenderId: "421661986639",
-  appId: "1:421661986639:web:aab3cbb3661937ac1d3f3a"
+  apiKey: "AIzaSyBRw2HTtcCdBDJempPaoxPDhkgieKyWKBU",
+  authDomain: "houmti-ndhifa-455d7.firebaseapp.com",
+  projectId: "houmti-ndhifa-455d7",
+  storageBucket: "houmti-ndhifa-455d7.appspot.com",
+  messagingSenderId: "988507420523",
+  appId: "1:988507420523:web:d7735ef576b3bc5bd9fe2e"
 };
 
 

@@ -1,14 +1,13 @@
 import { View, Text, StyleSheet } from 'react-native';
-import MapView, {  PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { PROVIDER_DEFAULT } from 'react-native-maps';
 import React, { useState, useEffect } from 'react';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 
 
 
-
-
 const MapPage = () => {
+
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
@@ -19,9 +18,7 @@ const MapPage = () => {
                 setErrorMsg('Permission to access location was denied');
                 return;
             }
-
             let location = await Location.getCurrentPositionAsync({});
-            
             setLocation(location);
         })();
     }, []);
@@ -32,22 +29,22 @@ const MapPage = () => {
     } else if (location) {
         text = JSON.stringify(location);
     }
-    TaskManager.defineTask('YOUR_TASK_NAME', ({ data: { locations }, error }) => {
-        if (error)
-         { console.log(error)
-          // check `error.message` for more details.
-          return;
+
+    TaskManager.defineTask('LISTEN_LOCATION_CHANGES', ({ data: { locations }, error }) => {
+        if (error) {
+            console.log(error)
+            // check `error.message` for more details.
+            return;
         }
         console.log('Received new locations', locations);
-       });
+    });
 
-       Location.startLocationUpdatesAsync('YOUR_TASK_NAME',{})
+    Location.startLocationUpdatesAsync('LISTEN_LOCATION_CHANGES', {});
 
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
-
                 initialRegion={{
                     latitude: 35.820918,
                     longitude: 10.592252,
@@ -55,29 +52,14 @@ const MapPage = () => {
                     longitudeDelta: 0.0121,
                 }}
                 showsUserLocation={true}
-               
-
-
                 provider={PROVIDER_DEFAULT}>
                 <MapView.UrlTile
                     urlTemplate={"http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"}
                     shouldReplaceMapContent={true}>
                 </MapView.UrlTile>
 
-            
-
-
-
-
-
             </MapView>
-
-
-
-
-
         </View>
-
     )
 }
 
@@ -86,23 +68,21 @@ const MapPage = () => {
 
 
 MapPage.navigationOptions = {
-
     headerShown: false,
 };
 
 const styles = StyleSheet.create({
-    container: {
 
+    container: {
         flex: 1,
         backgroundColor: '#ffffff00',
         alignItems: 'center',
         justifyContent: 'center',
     },
-    map: {
 
+    map: {
         flex: 1,
         width: "100%",
-
         alignItems: 'center',
         justifyContent: 'center',
 
