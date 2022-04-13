@@ -18,7 +18,16 @@ const SignUpPage = props => {
     const [loading, setLoading] = useState(false);
 
 
+    /**
+     * Sign up and add account to Firebase
+     * @param {*} firstName 
+     * @param {*} lastName 
+     * @param {*} email 
+     * @param {*} password 
+     * @returns 
+     */
     function signUp(firstName, lastName, email, password) {
+        // Show error msg when first name or last name are empty
         if (firstName.trim() == '' || lastName.trim() == '') {
             setErrorMsg('Please tell us your first and last name');
             return;
@@ -30,16 +39,17 @@ const SignUpPage = props => {
         createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
             // Sign up succeded
             const userId = userCredential.user.uid;
-            // Create new user entry in the database
+            // Create new user entry in the realtime database
             set(ref(db, 'users/' + userId), {
                 firstName: firstName,
                 lastName: lastName,
                 email: email
             }).then(() => {
-                // All things are good, go to map view
+                // All is good, go to map view
                 props.navigation.navigate('MapPage');
                 setLoading(false);
             }).catch(e => {
+                // Create new user entry failed
                 console.error(e);
                 setLoading(false);
                 setErrorMsg('An unexpected error occurred, please try again later');
@@ -54,9 +64,10 @@ const SignUpPage = props => {
 
 
     return (
+
+        // KeyboardAwareScrollView is used to make the view scrollable and behave nicely when the keyboard is open
         <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'} contentContainerStyle={styles.container}
             showsVerticalScrollIndicator={false}>
-
 
             <Text style={styles.test} >Create Account</Text>
             <StatusBar style="auto" />
@@ -74,7 +85,7 @@ const SignUpPage = props => {
             <TextInput style={styles.Email}
                 placeholder="Email"
                 keyboardType='email-address'
-                onChange={email => setEmail(email)} />
+                onChangeText={email => setEmail(email)} />
 
             <TextInput style={styles.Password}
                 placeholder="Password"
@@ -97,8 +108,6 @@ const SignUpPage = props => {
                     <ActivityIndicator size="large" color="#008000" />
                 </View>}
 
-
-
         </KeyboardAwareScrollView>
     )
 
@@ -108,9 +117,9 @@ const SignUpPage = props => {
 
 
 SignUpPage.navigationOptions = {
-
     headerShown: false,
 };
+
 
 const styles = StyleSheet.create({
 

@@ -2,8 +2,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from 'react';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { useState, useEffect } from 'react';
 
 
 
@@ -18,10 +18,27 @@ const LoginPage = props => {
   const [loading, setLoading] = useState(false);
 
 
+  // Test if the user is logged in
+  // If the user is already logged in, go to MapPage
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        props.navigation.navigate('MapPage');
+      }
+    })
+  }, []);
+  
+
+  /**
+   * Sign in with Firebase
+   * @param {*} email 
+   * @param {*} password 
+   */
   function signIn(email, password) {
+    const auth = getAuth();
     setErrorMsg('');
     setLoading(true);
-    const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
       // Success
       const userId = userCredential.user.uid;
@@ -38,6 +55,7 @@ const LoginPage = props => {
 
   return (
 
+    // KeyboardAwareScrollView is used to make the view scrollable and behave nicely when the keyboard is open
     <KeyboardAwareScrollView contentContainerStyle={styles.container}
       keyboardShouldPersistTaps='handled'>
 
@@ -56,6 +74,7 @@ const LoginPage = props => {
         secureTextEntry={true}
         onChangeText={password => setPassword(password)} />
 
+      {/* Show an error when errorMsg is not empty */}
       {errorMsg != '' &&
         <Text style={styles.error}>{errorMsg}</Text>}
 
@@ -72,6 +91,7 @@ const LoginPage = props => {
         </TouchableOpacity>
       </View>
 
+      {/* Show loading indicator when loading is true */}
       {loading &&
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#008000" />

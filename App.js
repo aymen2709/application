@@ -7,7 +7,8 @@ import StackNavigation from "./src/StackNavigation";
 import { initializeApp } from 'firebase/app';
 
 
-
+// Important!!
+// Don't forget to change this to your Firebase Project config
 const firebaseConfig = {
   apiKey: "AIzaSyBRw2HTtcCdBDJempPaoxPDhkgieKyWKBU",
   authDomain: "houmti-ndhifa-455d7.firebaseapp.com",
@@ -23,9 +24,6 @@ export default function App (){
   initializeApp(firebaseConfig);
 
     return( 
-
-    
-
       <StackNavigation></StackNavigation>
     );
 
