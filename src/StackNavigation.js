@@ -11,16 +11,9 @@ import MapPage from './MapPage';
 
 
 const PageNavigator = createStackNavigator({
-
-
     LoginPage : {screen: LoginPage}  , 
     SignUpPage :{screen : SignUpPage} ,
     MapPage :{screen : MapPage},
-    
-    
-    
-    
-    
 }) ; 
 
 export default createAppContainer(PageNavigator) ; 
