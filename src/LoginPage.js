@@ -70,7 +70,7 @@ const LoginPage = props => {
 
       <TextInput style={styles.inputPassword}
         placeholder="password"
-        keyboardType='visible-password'
+        
         secureTextEntry={true}
         onChangeText={password => setPassword(password)} />
 
