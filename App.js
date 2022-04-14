@@ -7,8 +7,8 @@ import StackNavigation from "./src/StackNavigation";
 import { initializeApp } from 'firebase/app';
 
 
-// Important!!
-// Don't forget to change this to your Firebase Project config
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyCZmc_bWSzHPClO0FTIbGeALasuGJdP7Uk",
   authDomain: "houmti-ndhifa.firebaseapp.com",
