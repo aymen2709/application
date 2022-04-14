@@ -89,7 +89,6 @@ const SignUpPage = props => {
 
             <TextInput style={styles.Password}
                 placeholder="Password"
-                
                 secureTextEntry={true}
                 onChangeText={password => setPassword(password)} />
 
