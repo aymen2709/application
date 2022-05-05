@@ -8,6 +8,7 @@ import { initializeApp } from 'firebase/app';
 
 
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyCZmc_bWSzHPClO0FTIbGeALasuGJdP7Uk",
   authDomain: "houmti-ndhifa.firebaseapp.com",
@@ -19,13 +20,11 @@ const firebaseConfig = {
 
 
 
+
 export default function App (){
   initializeApp(firebaseConfig);
 
     return( 
-
-    
-
       <StackNavigation></StackNavigation>
     );
 
