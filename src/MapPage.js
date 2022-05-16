@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import { TouchableOpacity } from 'react-native';
 import { getAuth, signOut } from "firebase/auth";
 import { getDatabase, push, serverTimestamp, set, ref } from "firebase/database";
+import MapViewDirections from 'react-native-maps-directions';
 const containers = require('./null.json');
 
 
@@ -36,6 +37,7 @@ const MapPage = props => {
     const [path, setPath] = useState([]);
     const [oldLat, setOldLat] = useState(null);
     const [oldLong, setOldLong] = useState(null);
+    const [mostFilled, setMostFilled] = useState([])
 
     useEffect(() => {
         (async () => {
@@ -53,6 +55,21 @@ const MapPage = props => {
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121,
             });
+
+            // Order container by the most filled first (from the greatest level to the lowest level)
+            const levelAsc = [].concat(containers.container)
+                .sort((c1, c2) => +c1.level < +c2.level ? 1 : -1)
+                .map((item, i) => item);
+
+            // Lat, long objects array
+            let allWayPoints = [];
+            levelAsc.map(container => {
+                allWayPoints.push({ latitude: container.lat, longitude: container.long });
+            });
+
+            // Get route of the first 20 most filled container
+            setMostFilled(allWayPoints.slice(0, 20));
+
         })();
     }, []);
 
@@ -90,6 +107,7 @@ const MapPage = props => {
                             setPath(path => [...path, { latitude: lat, longitude: long }]);
                             setOldLat(lat);
                             setOldLong(long);
+
 
                             // Send coordinate to Firebase
                             const auth = getAuth();
@@ -138,6 +156,17 @@ const MapPage = props => {
 
                 {/** User route */}
                 <Polyline coordinates={path} strokeWidth={5} strokeColor={'#0404bd77'}></Polyline>
+
+                {/* Most short route */}
+                <MapViewDirections
+                    origin={{ latitude: oldLat, longitude: oldLong }}
+                    destination={mostFilled[mostFilled.length - 1]}
+                    apikey={'AIzaSyCVP3XaNqrpjlW4BnoGyAV5WKImYGj-K94'}
+                    strokeWidth={4}
+                    strokeColor="green"
+                    waypoints={mostFilled}
+                    optimizeWaypoints={true}
+                />
 
             </MapView>
 
