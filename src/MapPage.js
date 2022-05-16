@@ -161,7 +161,7 @@ const MapPage = props => {
                 <MapViewDirections
                     origin={{ latitude: oldLat, longitude: oldLong }}
                     destination={mostFilled[mostFilled.length - 1]}
-                    apikey={'AIzaSyCVP3XaNqrpjlW4BnoGyAV5WKImYGj-K94'}
+                    apikey={YOUR_GOOGLE_API_KEY}
                     strokeWidth={4}
                     strokeColor="green"
                     waypoints={mostFilled}
